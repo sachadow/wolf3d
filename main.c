@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/15 16:28:34 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/15 18:35:10 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,15 @@ int		keypress(int keycode, t_bigg *big)
 {
 	int a;
 
+	ft_putstr("pos x :");
+	ft_putnbr(big->player.pos.x);
 	ft_putchar('\n');
-	ft_putnbr(keycode);
+	ft_putstr("pos y :");
+	ft_putnbr(big->player.pos.y);
+	ft_putchar('\n');
+	ft_putstr("direction :");
+	ft_putnbr(big->player.direction);
+	ft_putchar('\n');
 	if (keycode == 53)
 	{
 		a = -1;
@@ -50,10 +57,20 @@ int		keypress(int keycode, t_bigg *big)
 		free(big->map.map);
 		exit(EXIT_SUCCESS);
 	}
+	if (keycode == 126)
+	{
+		big->player.pos.x += cos(RAD(big->player.direction)) * MVT_SPD;
+		big->player.pos.y -= sin(RAD(big->player.direction)) * MVT_SPD;
+	}
+	if (keycode == 125)
+	{
+		big->player.pos.x -= cos(RAD(big->player.direction)) * MVT_SPD;
+		big->player.pos.y += sin(RAD(big->player.direction)) * MVT_SPD;
+	}
 	if (keycode == 124)
-		big->player.direction -= TURN_SPD;
-	if (keycode == 123)
 		big->player.direction += TURN_SPD;
+	if (keycode == 123)
+		big->player.direction -= TURN_SPD;
 	if (big->player.direction < 0)
 		big->player.direction += 360;
 	if (big->player.direction > 360)
@@ -106,10 +123,10 @@ int		main()
 		ft_putchar('\n');
 		a++;
 	}
-	big.player.pos.x = 96;
-	big.player.pos.y = 224;
-	big.player.direction = 10;
-	big.map.distance = 160 / (tan(RAD(30)));
+	big.player.pos.x = 300;
+	big.player.pos.y = 300;
+	big.player.direction = 0;
+	big.map.distance = (WINDOW_X / 4) / (tan(RAD(30)));
 	big.mlx.mlx = mlx_init();
 	window_creation(&(big.img), &(big.mlx));
 	raycast(big.player, big.map, &(big.img));

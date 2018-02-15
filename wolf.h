@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/15 16:30:00 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/15 17:53:06 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 
 # define ABS(x) ((x) > 0 ? x : -(x))
 # define RAD(x) ((double)(x) / 57.3)
-# define WINDOW_X 320
-# define WINDOW_Y 200
-# define BLOC_SIZE 64
+# define WINDOW_X 1080
+# define WINDOW_Y 720
+# define BLOC_SIZE 100
 # define FOV 60
-# define MVT_SPD 5
+# define MVT_SPD 10
 # define TURN_SPD 5
 
 typedef struct	s_image

@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:53:41 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/15 16:34:29 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/15 19:13:58 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 int		check_wall(t_pos pos, t_map map)
 {
-	if (pos.x >= 0 && pos.x < map.len && pos.y >= 0 && pos.y < map.hgt)
+	if (pos.x >= 0 && pos.y >= 0 && pos.x < map.len && pos.y < map.hgt)
 		return (map.map[pos.y][pos.x]);
 	else
-		return (1);
+		return (0);
 }
 
 t_pos	horiz_intersec(t_char ray, t_map map)
@@ -89,8 +89,11 @@ int		dist(t_char ray, t_pos c, t_pos d)
 	c.y = (c.y < 0 ? 0 : c.y + 0);
 	d.x = (d.x < 0 ? 0 : d.x + 0);
 	d.y = (d.y < 0 ? 0 : d.y + 0);
-	if ((ray.direction > 120 && ray.direction < 250) || ray.direction > 300 ||
-			ray.direction < 70)
+	a = sqrt(pow(ray.pos.x - c.x, 2) + pow(ray.pos.y - c.y, 2));
+	b = sqrt(pow(ray.pos.x - d.x, 2) + pow(ray.pos.y - d.y, 2));
+	/*
+	if ((ray.direction > 135 && ray.direction < 225) || ray.direction > 315 ||
+			ray.direction < 45)
 	{
 		a = ABS(ray.pos.x - c.x) / cos(RAD(ray.direction));
 		b = ABS(ray.pos.x - d.x) / cos(RAD(ray.direction));
@@ -100,6 +103,7 @@ int		dist(t_char ray, t_pos c, t_pos d)
 		a = ABS(ray.pos.y - c.y) / sin(RAD(ray.direction));
 		b = ABS(ray.pos.y - d.y) / sin(RAD(ray.direction));
 	}
+	*/
 	if (ABS(a) < ABS(b))
 		return (ABS(a));
 	else
