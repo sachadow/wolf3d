@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/15 17:53:06 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/16 19:26:55 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 # define RAD(x) ((double)(x) / 57.3)
 # define WINDOW_X 1080
 # define WINDOW_Y 720
-# define BLOC_SIZE 100
+# define BLOC_SIZE 128
 # define FOV 60
 # define MVT_SPD 10
 # define TURN_SPD 5
 
 typedef struct	s_image
 {
+	double	ang;
 	char	*map;
 	int		line_len;
 	int		bpp;
@@ -46,9 +47,15 @@ typedef struct	s_mmlx
 
 typedef struct	s_pos
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 }				t_pos;
+
+typedef struct	s_posd
+{
+	double	x;
+	double	y;
+}				t_posd;
 
 typedef struct	s_map
 {
@@ -100,7 +107,7 @@ void			print_pixel(t_image *img, t_pos *pos, int *colo);
 **	different settings, in order to make a good looking
 **	fractol.
 */
-void			print_pixelc(t_image *img, t_pos *pos, char col[4]);
+void			print_pixelc(t_image *img, t_pos *pos, int cot);
 
 /*
 **	Creates the image img.

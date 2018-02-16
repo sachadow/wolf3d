@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/16 17:38:26 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/16 19:22:31 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ int		keypress(int keycode, t_bigg *big)
 	ft_putchar('\n');
 	ft_putstr("pos y :");
 	ft_putnbr(big->player.pos.y);
-	ft_putchar('\n');
-	ft_putstr("direction :");
-	ft_putnbr(big->player.direction);
 	ft_putchar('\n');
 	if (keycode == 53)
 	{
@@ -123,10 +120,8 @@ int		main()
 		ft_putchar('\n');
 		a++;
 	}
-	big.player.pos.x = 96;
-	big.player.pos.y = 224;
-	big.player.direction = 90;
-	big.map.distance = (WINDOW_X / 4) / (tan(RAD(30)));
+	big.player.pos.x = 2;
+	big.player.pos.y = 2;
 	big.mlx.mlx = mlx_init();
 	window_creation(&(big.img), &(big.mlx));
 	raycast(big.player, big.map, &(big.img));

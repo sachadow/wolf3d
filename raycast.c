@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:53:41 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/15 19:13:58 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/16 18:25:40 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_pos	horiz_intersec(t_char ray, t_map map)
 	t_pos c;
 	t_pos d;
 
-	if (ray.direction >= 0 && ray.direction <= 180)
+	if (ray.direction <= 180)
 		a.y = (int)(ray.pos.y / BLOC_SIZE) * BLOC_SIZE - 1;
 	else
 		a.y = (int)(ray.pos.y / BLOC_SIZE) * BLOC_SIZE + BLOC_SIZE;
@@ -39,7 +39,7 @@ t_pos	horiz_intersec(t_char ray, t_map map)
 	c.y = a.y;
 	d.x = c.x / BLOC_SIZE;
 	d.y = c.y / BLOC_SIZE;
-	while (check_wall(d, map) != 1 && d.x >= 0 && d.y >= 0 && d.x < map.len &&
+	while (check_wall(d, map) == 0 && d.x >= 0 && d.y >= 0 && d.x < map.len &&
 			d.y < map.hgt)
 	{
 		c.x += b.x;
@@ -60,7 +60,7 @@ t_pos	vertic_intersec(t_char ray, t_map map)
 	if (ray.direction >= 90 && ray.direction <= 270)
 		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE - 1;
 	else
-		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE + 64;
+		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE + BLOC_SIZE;
 	a.y = ray.pos.y + (ray.pos.x - a.x) * (tan(RAD(ray.direction)));
 	b.x = (ray.direction <= 270 && ray.direction >= 90 ?
 			-BLOC_SIZE : BLOC_SIZE);
@@ -69,7 +69,7 @@ t_pos	vertic_intersec(t_char ray, t_map map)
 	c.y = a.y;
 	d.x = c.x / BLOC_SIZE;
 	d.y = c.y / BLOC_SIZE;
-	while (check_wall(d, map) != 1 && d.x >= 0 && d.y >= 0 && d.x < map.len &&
+	while (check_wall(d, map) == 0 && d.x >= 0 && d.y >= 0 && d.x < map.len &&
 			d.y < map.hgt)
 	{
 		c.x += b.x;
@@ -80,37 +80,26 @@ t_pos	vertic_intersec(t_char ray, t_map map)
 	return (c);
 }
 
-int		dist(t_char ray, t_pos c, t_pos d)
+int		dist(t_char ray, t_pos c, t_pos d, int *cot)
 {
 	double a;
 	double b;
 
-	c.x = (c.x < 0 ? 0 : c.x + 0);
-	c.y = (c.y < 0 ? 0 : c.y + 0);
-	d.x = (d.x < 0 ? 0 : d.x + 0);
-	d.y = (d.y < 0 ? 0 : d.y + 0);
 	a = sqrt(pow(ray.pos.x - c.x, 2) + pow(ray.pos.y - c.y, 2));
 	b = sqrt(pow(ray.pos.x - d.x, 2) + pow(ray.pos.y - d.y, 2));
-	/*
-	if ((ray.direction > 135 && ray.direction < 225) || ray.direction > 315 ||
-			ray.direction < 45)
-	{
-		a = ABS(ray.pos.x - c.x) / cos(RAD(ray.direction));
-		b = ABS(ray.pos.x - d.x) / cos(RAD(ray.direction));
-	}
-	else
-	{
-		a = ABS(ray.pos.y - c.y) / sin(RAD(ray.direction));
-		b = ABS(ray.pos.y - d.y) / sin(RAD(ray.direction));
-	}
-	*/
 	if (ABS(a) < ABS(b))
+	{
+		*cot = 0;
 		return (ABS(a));
+	}
 	else
+	{
+		*cot = 1;
 		return (ABS(b));
+	}
 }
 
-void	print_slice(t_image *img, int a, int slice)
+void	print_slice(t_image *img, int a, int slice, int cot)
 {
 	int		b;
 	int		c;
@@ -129,7 +118,7 @@ void	print_slice(t_image *img, int a, int slice)
 		pos.x = a;
 		pos.y = b;
 		if (a >= 0 && b >= 0)
-			print_pixelc(img, &pos, "~~~");
+			print_pixelc(img, &pos, cot);
 		c++;
 		b++;
 	}
@@ -149,7 +138,7 @@ void	clean_map(t_image *img)
 		{
 			pos.x = b;
 			pos.y = a;
-			print_pixelc(img, &pos, "			");
+			print_pixelc(img, &pos, -1);
 			b++;
 		}
 		a++;
@@ -158,36 +147,35 @@ void	clean_map(t_image *img)
 
 void	raycast(t_char player, t_map map, t_image *img)
 {
-	double	ang;
 	double	pas;
 	int		a;
-	double	op;
+	int		cot;
 	double	distance;
 	t_pos	c;
 	t_pos	d;
 	t_char	ray;
 
 	clean_map(img); 
-	ang = player.direction - (FOV / 2);
 	ray = player;
-	if (ang < 0)
-		ang = ang + 360;
+	img->ang = player.direction - (FOV / 2);
+	if (img->ang < 0)
+		img->ang = img->ang + 360;
 	pas = (double)FOV / (double)WINDOW_X;
 	map.center_x = WINDOW_X / 2;
 	map.center_y = WINDOW_Y / 2;
-	op = BLOC_SIZE / map.distance;
 	a = 0;
 	while (a < WINDOW_X)
 	{
-		ray.direction = ang;
+		ray.direction = img->ang;
 		c = vertic_intersec(ray, map);
 		d = horiz_intersec(ray, map);
-		distance = dist(ray, c, d) * cos(RAD(player.direction - ang));
+		distance = dist(ray, c, d, &cot) * cos(RAD(player.direction -
+					img->ang));
 		map.slice = ((double)BLOC_SIZE / (double)distance) * map.distance;
-		print_slice(img, a, map.slice);
+		print_slice(img, a, map.slice, cot);
 		a++;
-		ang += pas;
-		if (ang > 360)
-			ang = ang - 360;
+		img->ang += pas;
+		if (img->ang > 360)
+			img->ang = img->ang - 360;
 	}
 }
