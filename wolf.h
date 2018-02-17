@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/16 19:26:55 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/17 18:51:38 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 # define RAD(x) ((double)(x) / 57.3)
 # define WINDOW_X 1080
 # define WINDOW_Y 720
-# define BLOC_SIZE 128
+# define BLOC_SIZE 256
 # define FOV 60
-# define MVT_SPD 10
-# define TURN_SPD 5
+# define MVT_SPD 25
+# define TURN_SPD 3
 
 typedef struct	s_image
 {
+	char	**sprites;
 	double	ang;
 	char	*map;
 	int		line_len;
@@ -44,6 +45,12 @@ typedef struct	s_mmlx
 	void *win;
 	void *image;
 }				t_mmlx;
+
+typedef struct	s_dbint
+{
+	int a;
+	int cot;
+}				t_dbint;
 
 typedef struct	s_pos
 {

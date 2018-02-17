@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:11:13 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/16 18:14:29 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/17 18:49:29 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ void	print_pixelc(t_image *img, t_pos *pos, int cot)
 	a = -1;
 	while (++a < 3)
 		colo[a] = b;
-	print_pixel(img, pos, colo);
+	if (pos->x >= 0 && pos->x < WINDOW_X && pos->y >= 0 && pos->y < WINDOW_Y)
+		print_pixel(img, pos, colo);
 }

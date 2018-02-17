@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/16 17:38:26 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/17 18:48:33 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		std_err(int err, t_map *map)
 {
 	int a;
 
-	if (map->map != NULL)
+	if (map != NULL && map->map != NULL)
 	{
 		a = -1;
 		while (map->map[++a] != 0)
@@ -36,7 +36,54 @@ int		std_err(int err, t_map *map)
 	return (1);
 }
 
+/*
 int		keypress(int keycode, t_bigg *big)
+{
+	int a;
+
+	ft_putstr("pos x :");
+	ft_putnbr(big->player.pos.x);
+	ft_putchar('\n');
+	ft_putstr("pos y :");
+	ft_putnbr(big->player.pos.y);
+	ft_putchar('\n');
+	ft_putstr("direction :");
+	ft_putnbr(big->player.direction);
+	ft_putchar('\n');
+	if (keycode == 53)
+	{
+		a = -1;
+		while (++a < big->map.hgt)
+			free(big->map.map[a]);
+		free(big->map.map);
+		exit(EXIT_SUCCESS);
+	}
+	if (keycode == 126)
+	{
+		big->player.pos.x += cos(RAD(big->player.direction)) * MVT_SPD;
+		big->player.pos.y -= sin(RAD(big->player.direction)) * MVT_SPD;
+	}
+	if (keycode == 125)
+	{
+		big->player.pos.x -= cos(RAD(big->player.direction)) * MVT_SPD;
+		big->player.pos.y += sin(RAD(big->player.direction)) * MVT_SPD;
+	}
+	if (keycode == 124)
+		big->player.direction += TURN_SPD;
+	if (keycode == 123)
+		big->player.direction -= TURN_SPD;
+	if (big->player.direction < 0)
+		big->player.direction += 360;
+	if (big->player.direction > 360)
+		big->player.direction -= 360;
+	raycast(big->player, big->map, &(big->img));
+	mlx_put_image_to_window(big->mlx.mlx, big->mlx.win, big->mlx.image, 0, 0);
+	mlx_loop(big->mlx.mlx);
+	return (0);
+}
+*/
+
+int		press_button(int keycode, t_bigg *big)
 {
 	int a;
 
@@ -126,13 +173,14 @@ int		main()
 	big.player.pos.x = 96;
 	big.player.pos.y = 224;
 	big.player.direction = 90;
-	big.map.distance = (WINDOW_X / 4) / (tan(RAD(30)));
+	big.map.distance = (WINDOW_X / 2) / (tan(RAD(30)));
 	big.mlx.mlx = mlx_init();
 	window_creation(&(big.img), &(big.mlx));
 	raycast(big.player, big.map, &(big.img));
 	mlx_put_image_to_window(big.mlx.mlx, big.mlx.win, big.mlx.image, 0, 0);
-	mlx_key_hook(big.mlx.win, &keypress, &big);
+//	mlx_key_hook(big.mlx.win, &keypress, &big);
 	mlx_mouse_hook(big.mlx.win, &mousepress, &big);
+	mlx_hook(big.mlx.win, 2, 0, press_button, &big);
 	mlx_hook(big.mlx.win, 17, 0, quit_button, &big);
 	mlx_loop(big.mlx.mlx);
 }
