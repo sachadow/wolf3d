@@ -6,72 +6,100 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:53:41 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/16 19:30:44 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/17 18:42:56 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 #include <math.h>
 
-double	intersec(t_char ray, t_char player, t_map map, int *cot)
+int		check_wall(t_pos pos, t_map map)
 {
-	t_pos	mappos;
-	t_posd	ddist;
-	t_posd	sdist;
-	double	walldist;
-	t_posd	step;
-	int		hit;
-
-	mappos.x = (int)player.pos.x;
-	mappos.y = (int)player.pos.y;
-	ddist.x = ABS(1 / ray.pos.x);
-	ddist.y = ABS(1 / ray.pos.y);
-	if (ray.pos.x < 0)
-	{
-		step.x = -1;
-		sdist.x = (player.pos.x - mappos.x) * ddist.x;
-	}
+	if (pos.x >= 0 && pos.y >= 0 && pos.x < map.len && pos.y < map.hgt)
+		return (map.map[pos.y][pos.x]);
 	else
-	{
-		step.x = 1;
-		sdist.x = (mappos.x + 1.0 - player.pos.x) * ddist.x;
-	}
-	if (ray.pos.y < 0)
-	{
-		step.y = -1;
-		sdist.y = (player.pos.y - mappos.y) * ddist.y;
-	}
-	else
-	{
-		step.y = 1;
-		sdist.y = (mappos.y + 1.0 - player.pos.y) * ddist.y;
-	}
-	hit = 0;
-	while (hit == 0)
-	{
-		if (sdist.x < sdist.y)
-		{
-			sdist.x += ddist.x;
-			mappos.x += step.x;
-			*cot = 0;
-		}
-		else
-		{
-			sdist.y += ddist.y;
-			mappos.y += step.y;
-			*cot = 1;
-		}
-		if (map.map[(int)mappos.x][(int)mappos.y] != 0)
-			hit = 1;
-	}
-	if (*cot == 0)
-		walldist = (mappos.x - player.pos.x + (1 - step.x) / 2) / ray.pos.x;
-	else
-		walldist = (mappos.y - player.pos.y + (1 - step.y) / 2) / ray.pos.y;
-	return (walldist);
+		return (0);
 }
 
-void	print_slice(t_image *img, int a, int slice, int cot)
+t_posd	horiz_intersec(t_char ray, t_map map)
+{
+	t_posd	a;
+	t_posd	b;
+	t_posd	c;
+	t_pos	d;
+
+	if (ray.direction < 180)
+		a.y = (int)(ray.pos.y / BLOC_SIZE) * BLOC_SIZE - 1;
+	else
+		a.y = (int)(ray.pos.y / BLOC_SIZE) * BLOC_SIZE + BLOC_SIZE;
+	a.x = ray.pos.x + (ray.pos.y - a.y)/(tan(RAD(ray.direction)));
+	b.y = (ray.direction > 180 ? BLOC_SIZE : -BLOC_SIZE);
+	b.x = (-b.y) / (tan(RAD(ray.direction)));
+	c.x = a.x;
+	c.y = a.y;
+	d.x = c.x / BLOC_SIZE;
+	d.y = c.y / BLOC_SIZE;
+	while (check_wall(d, map) == 0 && d.x >= 0 && d.y >= 0 && d.x < map.len &&
+			d.y < map.hgt)
+	{
+		c.x += b.x;
+		c.y += b.y;
+		d.x = c.x / BLOC_SIZE;
+		d.y = c.y / BLOC_SIZE;
+	}
+	return (c);
+}
+
+t_posd	vertic_intersec(t_char ray, t_map map)
+{
+	t_posd	a;
+	t_posd	b;
+	t_posd	c;
+	t_pos	d;
+
+	if (ray.direction > 90 && ray.direction < 270)
+		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE - 1;
+	else
+		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE + BLOC_SIZE;
+	a.y = ray.pos.y + (ray.pos.x - a.x) * (tan(RAD(ray.direction)));
+	b.x = (ray.direction < 270 && ray.direction > 90 ?
+			-BLOC_SIZE : BLOC_SIZE);
+	b.y = (-b.x) * (tan(RAD(ray.direction)));
+	c.x = a.x;
+	c.y = a.y;
+	d.x = c.x / BLOC_SIZE;
+	d.y = c.y / BLOC_SIZE;
+	while (check_wall(d, map) == 0 && d.x >= 0 && d.y >= 0 && d.x < map.len &&
+			d.y < map.hgt)
+	{
+		c.x += b.x;
+		c.y += b.y;
+		d.x = c.x / BLOC_SIZE;
+		d.y = c.y / BLOC_SIZE;
+	}
+	return (c);
+}
+
+int		dist(t_char ray, t_posd c, t_posd d, int *cot)
+{
+	double a;
+	double b;
+
+	a = sqrt(pow(ray.pos.x - c.x, 2) + pow(ray.pos.y - c.y, 2));
+	b = sqrt(pow(ray.pos.x - d.x, 2) + pow(ray.pos.y - d.y, 2));
+	if (ABS(a) < ABS(b))
+	{
+		*cot = 0;
+		return (ABS(a));
+	}
+	else
+	{
+		*cot = 1;
+		return (ABS(b));
+	}
+}
+
+void	print_slice(t_image *img, t_dbint a, int slice)
 {
 	int		b;
 	int		c;
@@ -87,10 +115,11 @@ void	print_slice(t_image *img, int a, int slice, int cot)
 	c = 0;
 	while (c < slice)
 	{
-		pos.x = a;
+		pos.x = a.a;
 		pos.y = b;
-		if (a >= 0 && b >= 0)
-			print_pixelc(img, &pos, cot);
+		a.a = slice;
+		if (a.a >= 0 && b >= 0)
+			print_pixelc(img, &pos, a);
 		c++;
 		b++;
 	}
@@ -98,10 +127,12 @@ void	print_slice(t_image *img, int a, int slice, int cot)
 
 void	clean_map(t_image *img)
 {
-	t_pos pos;
-	int a;
-	int b;
+	t_pos	pos;
+	int		a;
+	int		b;
+	t_dbint	o;
 
+	o.a = -1;
 	a = 0;
 	while (a < WINDOW_Y)
 	{
@@ -110,7 +141,7 @@ void	clean_map(t_image *img)
 		{
 			pos.x = b;
 			pos.y = a;
-			print_pixelc(img, &pos, -1);
+			print_pixelc(img, &pos, o, (void*)0);
 			b++;
 		}
 		a++;
@@ -119,28 +150,34 @@ void	clean_map(t_image *img)
 
 void	raycast(t_char player, t_map map, t_image *img)
 {
-	int		a;
-	int		cot;
+	double	pas;
+	t_dbint	a;
 	double	distance;
+	t_posd	c;
+	t_posd	d;
 	t_char	ray;
-	t_posd	dir;
-	t_posd	plane;
-	t_posd	camera;
 
-	dir.x = -1;
-	dir.y = 0;
-	plane.x = 0;
-	plane.y = 0.66;
-	clean_map(img);
-	a = 0;
-	while (a < WINDOW_X)
+	clean_map(img); 
+	ray = player;
+	img->ang = player.direction - (FOV / 2);
+	if (img->ang < 0)
+		img->ang = img->ang + 360;
+	pas = (double)FOV / (double)WINDOW_X;
+	map.center_x = WINDOW_X / 2;
+	map.center_y = WINDOW_Y / 2;
+	a.a = 0;
+	while (a.a < WINDOW_X)
 	{
-		camera.x = 2 * a / WINDOW_X - 1;
-		ray.pos.x = dir.x + plane.x * camera.x;
-		ray.pos.y = dir.y + plane.y * camera.y;
-		distance = intersec(ray, player, map, &cot);
-		map.slice = (int)(WINDOW_Y / distance);
-		print_slice(img, a, map.slice, cot);
-		a++;
+		ray.direction = img->ang;
+		c = vertic_intersec(ray, map);
+		d = horiz_intersec(ray, map);
+		distance = dist(ray, c, d, &(a.cot)) * cos(RAD(player.direction -
+					img->ang));
+		map.slice = ((double)BLOC_SIZE / (double)distance) * map.distance;
+		print_slice(img, a, map.slice);
+		a.a++;
+		img->ang += pas;
+		if (img->ang > 360)
+			img->ang = img->ang - 360;
 	}
 }

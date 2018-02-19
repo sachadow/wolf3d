@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/19 17:28:26 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/17 18:38:07 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,10 @@ int		main()
 	if (youpi("map.w3d", &(big.map)) == NULL)
 		return (std_err(2, &(big.map)));
 	a = 0;
+	big.img.sprites = (char**)malloc(sizeof(char*) * 1);
+	if ((big.img.sprites[0] = genl("mario.bmp")) == 0)
+		return (std_err(2, NULL));
+	return (0);
 	while (a < big.map.hgt)
 	{
 		b = 0;
@@ -170,9 +174,9 @@ int		main()
 		ft_putchar('\n');
 		a++;
 	}
-	big.player.pos.x = 300;
-	big.player.pos.y = 300;
-	big.player.direction = 270;
+	big.player.pos.x = 96;
+	big.player.pos.y = 224;
+	big.player.direction = 90;
 	big.map.distance = (WINDOW_X / 2) / (tan(RAD(30)));
 	big.mlx.mlx = mlx_init();
 	window_creation(&(big.img), &(big.mlx));
