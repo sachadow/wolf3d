@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/19 17:28:26 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/20 16:58:42 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,66 +36,10 @@ int		std_err(int err, t_map *map)
 	return (1);
 }
 
-/*
-int		keypress(int keycode, t_bigg *big)
-{
-	int a;
-
-	ft_putstr("pos x :");
-	ft_putnbr(big->player.pos.x);
-	ft_putchar('\n');
-	ft_putstr("pos y :");
-	ft_putnbr(big->player.pos.y);
-	ft_putchar('\n');
-	ft_putstr("direction :");
-	ft_putnbr(big->player.direction);
-	ft_putchar('\n');
-	if (keycode == 53)
-	{
-		a = -1;
-		while (++a < big->map.hgt)
-			free(big->map.map[a]);
-		free(big->map.map);
-		exit(EXIT_SUCCESS);
-	}
-	if (keycode == 126)
-	{
-		big->player.pos.x += cos(RAD(big->player.direction)) * MVT_SPD;
-		big->player.pos.y -= sin(RAD(big->player.direction)) * MVT_SPD;
-	}
-	if (keycode == 125)
-	{
-		big->player.pos.x -= cos(RAD(big->player.direction)) * MVT_SPD;
-		big->player.pos.y += sin(RAD(big->player.direction)) * MVT_SPD;
-	}
-	if (keycode == 124)
-		big->player.direction += TURN_SPD;
-	if (keycode == 123)
-		big->player.direction -= TURN_SPD;
-	if (big->player.direction < 0)
-		big->player.direction += 360;
-	if (big->player.direction > 360)
-		big->player.direction -= 360;
-	raycast(big->player, big->map, &(big->img));
-	mlx_put_image_to_window(big->mlx.mlx, big->mlx.win, big->mlx.image, 0, 0);
-	mlx_loop(big->mlx.mlx);
-	return (0);
-}
-*/
-
 int		press_button(int keycode, t_bigg *big)
 {
 	int a;
 
-	ft_putstr("pos x :");
-	ft_putnbr(big->player.pos.x);
-	ft_putchar('\n');
-	ft_putstr("pos y :");
-	ft_putnbr(big->player.pos.y);
-	ft_putchar('\n');
-	ft_putstr("direction :");
-	ft_putnbr(big->player.direction);
-	ft_putchar('\n');
 	if (keycode == 53)
 	{
 		a = -1;
@@ -104,24 +48,17 @@ int		press_button(int keycode, t_bigg *big)
 		free(big->map.map);
 		exit(EXIT_SUCCESS);
 	}
-	if (keycode == 126)
+	if (keycode == 126 || keycode == 125)
 	{
-		big->player.pos.x += cos(RAD(big->player.direction)) * MVT_SPD;
-		big->player.pos.y -= sin(RAD(big->player.direction)) * MVT_SPD;
+		big->player.pos.x += (keycode == 126 ? 1 : -1) *
+			cos(RAD(big->player.direction)) * MVT_SPD;
+		big->player.pos.y += (keycode == 126 ? -1 : 1) *
+			sin(RAD(big->player.direction)) * MVT_SPD;
 	}
-	if (keycode == 125)
-	{
-		big->player.pos.x -= cos(RAD(big->player.direction)) * MVT_SPD;
-		big->player.pos.y += sin(RAD(big->player.direction)) * MVT_SPD;
-	}
-	if (keycode == 124)
-		big->player.direction += TURN_SPD;
-	if (keycode == 123)
-		big->player.direction -= TURN_SPD;
-	if (big->player.direction < 0)
-		big->player.direction += 360;
-	if (big->player.direction > 360)
-		big->player.direction -= 360;
+	if (keycode == 124 || keycode == 123)
+		big->player.direction += (keycode == 124 ? TURN_SPD : -TURN_SPD);
+	big->player.direction += (big->player.direction < 0 ? 360 : 0);
+	big->player.direction -= (big->player.direction > 360 ? 360 : 0);
 	raycast(big->player, big->map, &(big->img));
 	mlx_put_image_to_window(big->mlx.mlx, big->mlx.win, big->mlx.image, 0, 0);
 	mlx_loop(big->mlx.mlx);
@@ -147,29 +84,15 @@ int		quit_button(t_bigg *big)
 		free(big->map.map[a]);
 	free(big->map.map);
 	exit(EXIT_SUCCESS);
-	return(0);
+	return (0);
 }
 
-int		main()
+int		main(void)
 {
 	t_bigg	big;
-	int		a;
-	int		b;
 
 	if (youpi("map.w3d", &(big.map)) == NULL)
 		return (std_err(2, &(big.map)));
-	a = 0;
-	while (a < big.map.hgt)
-	{
-		b = 0;
-		while (b < big.map.len)
-		{
-			ft_putnbr(big.map.map[a][b]);
-			b++;
-		}
-		ft_putchar('\n');
-		a++;
-	}
 	big.player.pos.x = 300;
 	big.player.pos.y = 300;
 	big.player.direction = 270;
@@ -178,9 +101,9 @@ int		main()
 	window_creation(&(big.img), &(big.mlx));
 	raycast(big.player, big.map, &(big.img));
 	mlx_put_image_to_window(big.mlx.mlx, big.mlx.win, big.mlx.image, 0, 0);
-//	mlx_key_hook(big.mlx.win, &keypress, &big);
 	mlx_mouse_hook(big.mlx.win, &mousepress, &big);
 	mlx_hook(big.mlx.win, 2, 0, press_button, &big);
 	mlx_hook(big.mlx.win, 17, 0, quit_button, &big);
 	mlx_loop(big.mlx.mlx);
+	return (0);
 }

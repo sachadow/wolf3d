@@ -6,12 +6,12 @@
 #    By: sderet <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/13 15:33:21 by sderet            #+#    #+#              #
-#    Updated: 2018/02/17 18:25:04 by sderet           ###   ########.fr        #
+#    Updated: 2018/02/20 17:20:11 by sderet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = wolf3d
-SRCS = main.c win_crea.c genl.c parse.c raycast.c display_fun.c
+SRCS = main.c win_crea.c genl.c parse.c raycast.c display_fun.c raycast_annexe.c
 HEAD = wolf.h
 LIBS = -L./libft -lft -L./minilibx -lmlx
 FRAMEW = -framework OpenGL -framework Appkit

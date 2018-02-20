@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/19 15:50:15 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/20 17:19:44 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,15 @@ void			print_pixel(t_image *img, t_pos *pos, int *colo);
 **	different settings, in order to make a good looking
 **	fractol.
 */
-void			print_pixelc(t_image *img, t_pos *pos, int cot, t_dposd *c);
+void			print_pixelc(t_image *img, t_pos *pos, t_dposd *c, int slice);
 
 /*
 **	Creates the image img.
 */
 void			window_creation(t_image *img, t_mmlx *mlx);
+
+int				check_wall(t_pos pos, t_map map);
+
+void			clean_map(t_image *img);
 
 #endif

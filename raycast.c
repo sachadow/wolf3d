@@ -6,20 +6,12 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:53:41 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/19 16:34:57 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/20 17:27:44 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 #include <math.h>
-
-int		check_wall(t_pos pos, t_map map)
-{
-	if (pos.x >= 0 && pos.y >= 0 && pos.x < map.len && pos.y < map.hgt)
-		return (map.map[pos.y][pos.x]);
-	else
-		return (0);
-}
 
 t_posd	horiz_intersec(t_char ray, t_map map)
 {
@@ -32,7 +24,7 @@ t_posd	horiz_intersec(t_char ray, t_map map)
 		a.y = (int)(ray.pos.y / BLOC_SIZE) * BLOC_SIZE - 1;
 	else
 		a.y = (int)(ray.pos.y / BLOC_SIZE) * BLOC_SIZE + BLOC_SIZE;
-	a.x = ray.pos.x + (ray.pos.y - a.y)/(tan(RAD(ray.direction)));
+	a.x = ray.pos.x + (ray.pos.y - a.y) / (tan(RAD(ray.direction)));
 	b.y = (ray.direction > 180 ? BLOC_SIZE : -BLOC_SIZE);
 	b.x = (-b.y) / (tan(RAD(ray.direction)));
 	c.x = a.x;
@@ -57,10 +49,8 @@ t_posd	vertic_intersec(t_char ray, t_map map)
 	t_posd	c;
 	t_pos	d;
 
-	if (ray.direction > 90 && ray.direction < 270)
-		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE - 1;
-	else
-		a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE + BLOC_SIZE;
+	a.x = (int)(ray.pos.x / BLOC_SIZE) * BLOC_SIZE + (ray.direction > 90 &&
+			ray.direction < 270 ? -1 : BLOC_SIZE);
 	a.y = ray.pos.y + (ray.pos.x - a.x) * (tan(RAD(ray.direction)));
 	b.x = (ray.direction < 270 && ray.direction > 90 ?
 			-BLOC_SIZE : BLOC_SIZE);
@@ -106,10 +96,10 @@ void	print_slice(t_image *img, int a, int slice, t_dposd cot)
 	t_pos	pos;
 
 	b = 0;
-	if (slice >= WINDOW_Y)
-		slice = WINDOW_Y - 1;
-	else if (slice >= 0)
-		b = (slice < WINDOW_Y ? (WINDOW_Y - slice) / 2 : WINDOW_Y - 1);
+	if (slice > WINDOW_Y + (WINDOW_Y / 3))
+		slice = WINDOW_Y + (WINDOW_Y / 3);
+	if (slice >= 0)
+		b = (slice < WINDOW_Y ? (WINDOW_Y - slice) / 2 : 0);
 	else
 		slice = 0;
 	c = 0;
@@ -118,31 +108,9 @@ void	print_slice(t_image *img, int a, int slice, t_dposd cot)
 		pos.x = a;
 		pos.y = b;
 		if (a >= 0 && b >= 0)
-			print_pixelc(img, &pos, cot.cot, &cot);
+			print_pixelc(img, &pos, &cot, slice);
 		c++;
 		b++;
-	}
-}
-
-void	clean_map(t_image *img)
-{
-	t_pos	pos;
-	int		a;
-	int		b;
-
-	a = -1;
-	a = 0;
-	while (a < WINDOW_Y)
-	{
-		b = 0;
-		while (b < WINDOW_X)
-		{
-			pos.x = b;
-			pos.y = a;
-			print_pixelc(img, &pos, -1, 0);
-			b++;
-		}
-		a++;
 	}
 }
 
@@ -154,14 +122,11 @@ void	raycast(t_char player, t_map map, t_image *img)
 	t_dposd	c;
 	t_char	ray;
 
-	clean_map(img); 
+	clean_map(img);
 	ray = player;
 	img->ang = player.direction - (FOV / 2);
-	if (img->ang < 0)
-		img->ang = img->ang + 360;
+	img->ang += (img->ang < 0 ? 360 : 0);
 	pas = (double)FOV / (double)WINDOW_X;
-	map.center_x = WINDOW_X / 2;
-	map.center_y = WINDOW_Y / 2;
 	a = 0;
 	while (a < WINDOW_X)
 	{
@@ -174,7 +139,6 @@ void	raycast(t_char player, t_map map, t_image *img)
 		print_slice(img, a, map.slice, c);
 		a++;
 		img->ang += pas;
-		if (img->ang > 360)
-			img->ang = img->ang - 360;
+		img->ang -= (img->ang > 360 ? 360 : 0);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/20 18:39:48 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/17 17:46:01 by sderet           ###   ########.fr       */
+/*   Updated: 2018/02/20 17:04:46 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,27 +63,28 @@ char	***sstrsplit(char *gnltab)
 
 int		**postab(char ***split, t_map *map)
 {
-	int		a;
-	int		b;
+	t_pos	a;
 	int		c;
 	int		**tab;
 
-	a = -1;
-	while (split[++a] != 0);
-	if (!(tab = (int**)malloc(sizeof(int*) * (a))))
+	a.x = -1;
+	while (split[++a.x] != 0)
+		;
+	if (!(tab = (int**)malloc(sizeof(int*) * (a.x))))
 		return (NULL);
-	map->hgt = a;
-	a = -1;
+	map->hgt = a.x;
+	a.x = -1;
 	c = 0;
-	while (split[++a] != 0)
+	while (split[++a.x] != 0)
 	{
-		b = -1;
-		while (split[a][++b] != 0);
-		if (!(tab[a] = (int*)malloc(sizeof(int) * (b))))
+		a.y = -1;
+		while (split[a.x][++a.y] != 0)
+			;
+		if (!(tab[a.x] = (int*)malloc(sizeof(int) * (a.y))))
 			return (NULL);
-		c = (c == 0 ? b : c + 0);
-		map->len = b;
-		if (b != c)
+		c = (c == 0 ? a.y : c + 0);
+		map->len = a.y;
+		if (a.y != c)
 			return (NULL);
 	}
 	return (tab);
