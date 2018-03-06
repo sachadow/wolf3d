@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/22 17:42:59 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/06 18:29:43 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,30 @@
 
 # define ABS(x) ((x) > 0 ? x : -(x))
 # define RAD(x) ((double)(x) / 57.3)
-# define WINDOW_X 1080
-# define WINDOW_Y 720
-# define BLOC_SIZE 256
+# define WINDOW_X 720
+# define WINDOW_Y 480
+# define BLOC_SIZE 128
 # define FOV 60
 # define MVT_SPD 30
 # define TURN_SPD 3
 
 typedef struct	s_image
 {
-	char	**sprites;
 	double	ang;
 	char	*map;
+	char	*sp1;
+	char	*sp2;
+	char	*sp3;
+	char	*sp4;
 	int		line_len;
+	int		trash;
 	int		bpp;
 	int		t_len;
 	int		endian;
 	int		maxx;
 	int		maxy;
+	int		spritesizex;
+	int		spritesizey;
 }				t_image;
 
 typedef struct	s_mmlx
@@ -44,6 +50,10 @@ typedef struct	s_mmlx
 	void *mlx;
 	void *win;
 	void *image;
+	void *sprite1;
+	void *sprite2;
+	void *sprite3;
+	void *sprite4;
 }				t_mmlx;
 
 typedef struct	s_dbint
@@ -126,7 +136,9 @@ void			print_pixelc(t_image *img, t_pos *pos, t_dposd *c, int slice);
 /*
 **	Creates the image img.
 */
-void			window_creation(t_image *img, t_mmlx *mlx);
+void			window_creation(t_image *img, t_mmlx *mlx, t_bigg *big);
+
+int				std_err(int err, t_map *map);
 
 int				check_wall(t_pos pos, t_map map);
 

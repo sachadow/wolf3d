@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/20 16:58:42 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/06 18:02:03 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int		main(void)
 	big.player.direction = 270;
 	big.map.distance = (WINDOW_X / 2) / (tan(RAD(30)));
 	big.mlx.mlx = mlx_init();
-	window_creation(&(big.img), &(big.mlx));
+	window_creation(&(big.img), &(big.mlx), &big);
 	raycast(big.player, big.map, &(big.img));
 	mlx_put_image_to_window(big.mlx.mlx, big.mlx.win, big.mlx.image, 0, 0);
 	mlx_mouse_hook(big.mlx.win, &mousepress, &big);

@@ -1,0 +1,22 @@
+/* XPM */
+static char * gv_xpm[] = {
+	"13 13   6 1",
+	"A  c #FFFFFF " /* "0" */,
+	"B  c #CC0000 " /* "0.0399" */,
+	"C  c #190019 " /* "0.0798" */,
+	"D  c #CCCCCC " /* "0.12" */,
+	"E  c #222222 " /* "0.16" */,
+	"F  c #000000 " /* "0.2" */,
+	"CCCCCCCCCCCCC",
+	"CCCCACCCECCCC",
+	"CCCADAEEFECCC",
+	"CCAAAAEEEEECC",
+	"CAAAAAEEEEEEC",
+	"CAAAAAEEBBBEC",
+	"CAAAFAEBBBEEC",
+	"CAAAAAEEEEEEC",
+	"CAAAFAEEEEDEC",
+	"CAAAAFDDDDEEC",
+	"CCAAAADDDEECC",
+	"CCCAAAEEEECCC",
+	"CCCCCCCCCCCCC"

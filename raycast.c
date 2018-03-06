@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 17:53:41 by sderet            #+#    #+#             */
-/*   Updated: 2018/02/20 17:27:44 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/06 17:49:08 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ void	print_slice(t_image *img, int a, int slice, t_dposd cot)
 	t_pos	pos;
 
 	b = 0;
-	if (slice > WINDOW_Y + (WINDOW_Y / 3))
-		slice = WINDOW_Y + (WINDOW_Y / 3);
+	if (slice > WINDOW_Y * 2.5)
+		slice = WINDOW_Y * 2.5;
 	if (slice >= 0)
 		b = (slice < WINDOW_Y ? (WINDOW_Y - slice) / 2 : 0);
 	else
