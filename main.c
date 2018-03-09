@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/05 17:42:40 by sderet            #+#    #+#             */
-/*   Updated: 2018/03/06 18:02:03 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/09 18:44:22 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,23 @@ int		press_button(int keycode, t_bigg *big)
 	}
 	if (keycode == 126 || keycode == 125)
 	{
+/*
+		a = cos(RAD(big->player.direction)) * MVT_SPD;
+		b = sin(RAD(big->player.direction)) * MVT_SPD;
+		if (big->map.map[big->player.pos.y / BLOC_SIZE][(big->player.pos.x
+				+ (keycode == 126 ? 1 : -1) * a) / BLOC_SIZE] == 0)
+			big->player.pos.x += (keycode == 126 ? 1 : -1) * a;
+		ft_putnbr(big->map.map[(big->player.pos.y += (keycode == 126 ? -1 : 1)
+					* b) / BLOC_SIZE][(big->player.pos.x + (keycode == 126 ?
+					1 : -1) * a) / BLOC_SIZE]);
+		ft_putnbr((big->player.pos.x += (keycode == 126 ? -1 : 1)
+					* a) / BLOC_SIZE);
+		ft_putnbr((big->player.pos.y + (keycode == 126 ?
+					-1 : 1) * b) / BLOC_SIZE);
+		if (big->map.map[(big->player.pos.y + (keycode == 126 ? -1 : 1) * b)
+				/ BLOC_SIZE][big->player.pos.x / BLOC_SIZE] == 0)
+			big->player.pos.y += (keycode == 126 ? -1 : 1) * b;
+*/
 		big->player.pos.x += (keycode == 126 ? 1 : -1) *
 			cos(RAD(big->player.direction)) * MVT_SPD;
 		big->player.pos.y += (keycode == 126 ? -1 : 1) *
@@ -62,15 +79,6 @@ int		press_button(int keycode, t_bigg *big)
 	raycast(big->player, big->map, &(big->img));
 	mlx_put_image_to_window(big->mlx.mlx, big->mlx.win, big->mlx.image, 0, 0);
 	mlx_loop(big->mlx.mlx);
-	return (0);
-}
-
-int		mousepress(int button, int x, int y, t_bigg *big)
-{
-	button += 0;
-	x += 0;
-	y += 0;
-	big += 0;
 	return (0);
 }
 
@@ -101,7 +109,6 @@ int		main(void)
 	window_creation(&(big.img), &(big.mlx), &big);
 	raycast(big.player, big.map, &(big.img));
 	mlx_put_image_to_window(big.mlx.mlx, big.mlx.win, big.mlx.image, 0, 0);
-	mlx_mouse_hook(big.mlx.win, &mousepress, &big);
 	mlx_hook(big.mlx.win, 2, 0, press_button, &big);
 	mlx_hook(big.mlx.win, 17, 0, quit_button, &big);
 	mlx_loop(big.mlx.mlx);

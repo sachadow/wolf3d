@@ -6,7 +6,7 @@
 #    By: sderet <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/13 15:33:21 by sderet            #+#    #+#              #
-#    Updated: 2018/02/20 17:20:11 by sderet           ###   ########.fr        #
+#    Updated: 2018/03/09 16:48:07 by sderet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,9 +24,13 @@ all: $(NAME)
 debug: CFLAGS += -g
 debug: all
 
-$(NAME): libft/libft.a $(OBJ)
+$(NAME): libft/libft.a minilibx/libmlx.a $(OBJ)
 	@$(CC) $(LIBS) $(FRAMEW) -o $(NAME) $(SRCS) $(CFLAGS)
 	@echo "Successfully compiled $(NAME)"
+
+minilibx/libmlx.a:	
+	@$(MAKE) -C minilibx
+	@echo "Successfully compiled minilibx"
 
 libft/libft.a:
 	@$(MAKE) -C libft
@@ -39,6 +43,7 @@ $(OBJ): %.o: %.c $(HEAD)
 clean:
 	@rm -f $(OBJ)
 	@$(MAKE) -C libft $@
+	@$(MAKE) -C minilibx $@
 	@echo "$(NAME) clean successful"
 
 fclean: clean

@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/03/06 18:29:43 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/09 17:22:17 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@
 # define MVT_SPD 30
 # define TURN_SPD 3
 
+typedef struct	s_pos
+{
+	int	x;
+	int	y;
+}				t_pos;
+
 typedef struct	s_image
 {
 	double	ang;
@@ -43,6 +49,7 @@ typedef struct	s_image
 	int		maxy;
 	int		spritesizex;
 	int		spritesizey;
+	t_pos	*pos;
 }				t_image;
 
 typedef struct	s_mmlx
@@ -61,12 +68,6 @@ typedef struct	s_dbint
 	int a;
 	int cot;
 }				t_dbint;
-
-typedef struct	s_pos
-{
-	int	x;
-	int	y;
-}				t_pos;
 
 typedef struct	s_posd
 {
