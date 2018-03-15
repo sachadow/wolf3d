@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:36:53 by sderet            #+#    #+#             */
-/*   Updated: 2018/03/09 17:22:17 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/15 17:18:05 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define WINDOW_Y 480
 # define BLOC_SIZE 128
 # define FOV 60
-# define MVT_SPD 30
+# define MVT_SPD 20
 # define TURN_SPD 3
 
 typedef struct	s_pos
@@ -95,6 +95,8 @@ typedef struct	s_map
 
 typedef struct	s_char
 {
+	int		move;
+	int		turn;
 	t_pos	pos;
 	double	direction;
 }				t_char;

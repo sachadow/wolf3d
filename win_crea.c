@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 16:05:17 by sderet            #+#    #+#             */
-/*   Updated: 2018/03/09 16:48:55 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/15 17:31:38 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,20 @@ int		win_crea_minus(t_image *img, t_mmlx *mlx)
 	int a;
 	int b;
 
-	mlx->sprite1 = mlx_xpm_file_to_image(mlx->mlx, "mo.xpm", &img->spritesizex,
-			&img->spritesizey);
+	mlx->sprite1 = mlx_xpm_file_to_image(mlx->mlx, "images/gg.xpm",
+			&img->spritesizex, &img->spritesizey);
 	a = img->spritesizex;
 	b = img->spritesizey;
-	mlx->sprite2 = mlx_xpm_file_to_image(mlx->mlx, "m.xpm", &img->spritesizex,
-			&img->spritesizey);
+	mlx->sprite2 = mlx_xpm_file_to_image(mlx->mlx, "images/fe.xpm",
+			&img->spritesizex, &img->spritesizey);
 	if (b < img->spritesizey)
 		img->spritesizex = a;
-	mlx->sprite3 = mlx_xpm_file_to_image(mlx->mlx, "k.xpm", &img->spritesizex,
-			&img->spritesizey);
+	mlx->sprite3 = mlx_xpm_file_to_image(mlx->mlx, "images/la.xpm",
+			&img->spritesizex, &img->spritesizey);
 	if (b < img->spritesizey)
 		img->spritesizex = a;
-	mlx->sprite4 = mlx_xpm_file_to_image(mlx->mlx, "rk.xpm", &img->spritesizex,
-			&img->spritesizey);
+	mlx->sprite4 = mlx_xpm_file_to_image(mlx->mlx, "images/nm.xpm",
+			&img->spritesizex, &img->spritesizey);
 	if (b < img->spritesizey)
 		img->spritesizex = a;
 	return (1);
