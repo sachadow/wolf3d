@@ -6,7 +6,7 @@
 /*   By: sderet <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/18 16:11:13 by sderet            #+#    #+#             */
-/*   Updated: 2018/03/09 17:00:56 by sderet           ###   ########.fr       */
+/*   Updated: 2018/03/20 14:58:10 by sderet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,35 @@ void	print_pixelc(t_image *img, t_pos *pos, t_dposd *c, int slice)
 		img->pos = pos;
 		pre_ppc(colo, img, c, slice);
 		a = -1;
-		if (((ABS((int)c->d.x) % BLOC_SIZE >= BLOC_SIZE - (BLOC_SIZE / 20)
-				|| ABS((int)c->d.x) % BLOC_SIZE <= (BLOC_SIZE / 20)) &&
+		if (((ABS((int)c->d.x) % BLOC_SIZE >= BLOC_SIZE - (BLOC_SIZE / 25)
+				|| ABS((int)c->d.x) % BLOC_SIZE <= (BLOC_SIZE / 25)) &&
 				c->cot == 1) || ((ABS((int)c->c.y) % BLOC_SIZE >= BLOC_SIZE
-				- (BLOC_SIZE / 20) || ABS((int)c->c.y) % BLOC_SIZE <=
-				(BLOC_SIZE / 20)) && c->cot == 0))
+				- (BLOC_SIZE / 25) || ABS((int)c->c.y) % BLOC_SIZE <=
+				(BLOC_SIZE / 25)) && c->cot == 0))
 			while (++a < 3)
 				colo[a] = 255;
 	}
 	if (pos->x >= 0 && pos->x < WINDOW_X && pos->y >= 0 && pos->y < WINDOW_Y)
 		print_pixel(img, pos, colo);
+}
+
+int		std_err(int err, t_map *map)
+{
+	int a;
+
+	if (map != NULL && map->map != NULL)
+	{
+		a = -1;
+		while (map->map[++a] != 0)
+			free(map->map[a]);
+		free(map->map);
+	}
+	if (err == 1)
+		ft_putendl("usage :	./wolf3d");
+	if (err == 2)
+	{
+		ft_putstr("Error : source file format may be incorrect or ");
+		ft_putendl("file doesn't exist.");
+	}
+	return (1);
 }
